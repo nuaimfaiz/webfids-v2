@@ -1,7 +1,26 @@
 import { Flight, FlightStatus } from '../types';
 
-// Base flight data (without dynamic status/delays)
-const baseDepartures = [
+// Define specific types for base data
+type BaseDeparture = {
+  id: string;
+  flightNumber: string;
+  airline: string;
+  destination: string;
+  scheduledTime: string;
+  gate: string;
+};
+
+type BaseArrival = {
+  id: string;
+  flightNumber: string;
+  airline: string;
+  origin: string;
+  scheduledTime: string;
+  gate: string;
+};
+
+// Base data
+const baseDepartures: BaseDeparture[] = [
   { id: 'd1', flightNumber: 'AA101', airline: 'American Airlines', destination: 'New York (JFK)', scheduledTime: '08:30', gate: 'A12' },
   { id: 'd2', flightNumber: 'DL202', airline: 'Delta Air Lines', destination: 'Atlanta (ATL)', scheduledTime: '09:15', gate: 'B7' },
   { id: 'd3', flightNumber: 'UA303', airline: 'United Airlines', destination: 'Chicago (ORD)', scheduledTime: '10:00', gate: 'C4' },
@@ -14,7 +33,7 @@ const baseDepartures = [
   { id: 'd10', flightNumber: 'QF010', airline: 'Qantas', destination: 'Sydney (SYD)', scheduledTime: '19:00', gate: 'A22' },
 ];
 
-const baseArrivals = [
+const baseArrivals: BaseArrival[] = [
   { id: 'a1', flightNumber: 'AA111', airline: 'American Airlines', origin: 'Los Angeles (LAX)', scheduledTime: '08:45', gate: 'A3' },
   { id: 'a2', flightNumber: 'DL222', airline: 'Delta Air Lines', origin: 'Seattle (SEA)', scheduledTime: '09:30', gate: 'B12' },
   { id: 'a3', flightNumber: 'UA333', airline: 'United Airlines', origin: 'Denver (DEN)', scheduledTime: '10:20', gate: 'C9' },
@@ -84,13 +103,23 @@ export function generateFlights(type: 'departures' | 'arrivals', currentTime: Da
     scheduledDate.setHours(hours, minutes, 0, 0);
     const estimatedDate = new Date(scheduledDate.getTime() + delayMinutes * 60000);
     
-    const status = computeStatus(scheduledTime, delayMinutes, type === 'departures' ? 'departure' : 'arrival', currentTime);
+    // Use type assertion to access the correct property
+    const destination = type === 'departures' 
+      ? (flight as BaseDeparture).destination 
+      : (flight as BaseArrival).origin;
+    
+    const status = computeStatus(
+      scheduledTime, 
+      delayMinutes, 
+      type === 'departures' ? 'departure' : 'arrival', 
+      currentTime
+    );
     
     return {
       id: flight.id,
       flightNumber: flight.flightNumber,
       airline: flight.airline,
-      destination: type === 'departures' ? flight.destination : (flight as any).origin,
+      destination: destination,
       scheduledTime,
       estimatedTime: formatTime(estimatedDate),
       gate: flight.gate,
