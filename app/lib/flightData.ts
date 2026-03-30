@@ -21,7 +21,7 @@ type BaseArrival = {
 
 // Base data
 const baseDepartures: BaseDeparture[] = [
-  { id: 'd1', flightNumber: 'AA101', airline: 'American Airlines', destination: 'New York (JFK)', scheduledTime: '08:30', gate: 'A12' },
+  { id: 'd1', flightNumber: 'Q2 5811', airline: 'Maldivian', destination: 'Male', scheduledTime: '09:00', gate: '-' },
   { id: 'd2', flightNumber: 'DL202', airline: 'Delta Air Lines', destination: 'Atlanta (ATL)', scheduledTime: '09:15', gate: 'B7' },
   { id: 'd3', flightNumber: 'UA303', airline: 'United Airlines', destination: 'Chicago (ORD)', scheduledTime: '10:00', gate: 'C4' },
   { id: 'd4', flightNumber: 'BA404', airline: 'British Airways', destination: 'London (LHR)', scheduledTime: '11:20', gate: 'D9' },
