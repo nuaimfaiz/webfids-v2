@@ -21,16 +21,18 @@ type BaseArrival = {
 
 // Base data
 const baseDepartures: BaseDeparture[] = [
-  { id: 'd1', flightNumber: 'Q2 5811', airline: 'Maldivian', destination: 'Male', scheduledTime: '09:00', gate: '-' },
-  { id: 'd2', flightNumber: 'DL202', airline: 'Delta Air Lines', destination: 'Atlanta (ATL)', scheduledTime: '09:15', gate: 'B7' },
-  { id: 'd3', flightNumber: 'UA303', airline: 'United Airlines', destination: 'Chicago (ORD)', scheduledTime: '10:00', gate: 'C4' },
-  { id: 'd4', flightNumber: 'BA404', airline: 'British Airways', destination: 'London (LHR)', scheduledTime: '11:20', gate: 'D9' },
-  { id: 'd5', flightNumber: 'AF505', airline: 'Air France', destination: 'Paris (CDG)', scheduledTime: '12:45', gate: 'E2' },
-  { id: 'd6', flightNumber: 'LH606', airline: 'Lufthansa', destination: 'Frankfurt (FRA)', scheduledTime: '13:30', gate: 'A5' },
-  { id: 'd7', flightNumber: 'EK707', airline: 'Emirates', destination: 'Dubai (DXB)', scheduledTime: '14:50', gate: 'F11' },
-  { id: 'd8', flightNumber: 'SQ808', airline: 'Singapore Airlines', destination: 'Singapore (SIN)', scheduledTime: '16:15', gate: 'G3' },
-  { id: 'd9', flightNumber: 'CX909', airline: 'Cathay Pacific', destination: 'Hong Kong (HKG)', scheduledTime: '17:40', gate: 'H8' },
-  { id: 'd10', flightNumber: 'QF010', airline: 'Qantas', destination: 'Sydney (SYD)', scheduledTime: '19:00', gate: 'A22' },
+  { id: 'd1', flightNumber: 'Q2 581', airline: 'Maldivian', destination: 'Male', scheduledTime: '09:00', gate: '-' },
+  { id: 'd2', flightNumber: 'VP 611', airline: 'Villa Air', destination: 'Male', scheduledTime: '10:15', gate: '-' },
+  { id: 'd3', flightNumber: 'Q2 583', airline: 'Maldivian', destination: 'Male', scheduledTime: '12:30', gate: '-' },
+  { id: 'd4', flightNumber: 'NR 421', airline: 'Manta Air', destination: 'Dharavandhoo', scheduledTime: '11:20', gate: '-' },
+  { id: 'd5', flightNumber: 'B4 092', airline: 'beOnd', destination: 'Dubai', scheduledTime: '13:00', gate: '-' },
+  { id: 'd6', flightNumber: 'Q2 585', airline: 'Maldivian', destination: 'Male', scheduledTime: '13:40', gate: '-' },
+  { id: 'd7', flightNumber: '6E 1136', airline: 'IndiGo', destination: 'Agatti', scheduledTime: '15:00', gate: '-' },
+  { id: 'd8', flightNumber: 'Q2 2111', airline: 'Maldivian', destination: 'Hanimaadhoo', scheduledTime: '15:15', gate: '--' },
+  { id: 'd9', flightNumber: 'NR 910', airline: 'Manta Air', destination: 'Male', scheduledTime: '16:20', gate: '-' },
+  { id: 'd10', flightNumber: 'Q2 587', airline: 'Maldivian', destination: 'Male', scheduledTime: '20:00', gate: '-' },
+  { id: 'd11', flightNumber: 'Q2 448', airline: 'Maldivian', destination: 'Male', scheduledTime: '22:35', gate: '-' },
+  { id: 'd12', flightNumber: 'NH 8210', airline: 'All Nippon Airways', destination: 'Paris Roissy', scheduledTime: '23:15', gate: '-' },
 ];
 
 const baseArrivals: BaseArrival[] = [
