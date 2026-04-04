@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { Plane, Search, Clock, RefreshCw } from 'lucide-react';
+import { Plane, Clock, RefreshCw, X, Search } from 'lucide-react';
 import FlightTable from './components/FlightTable';
 import FlightCard from './components/FlightCard';
 import { generateFlights } from './lib/flightData';
@@ -9,7 +9,9 @@ import { Flight } from './types';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<'departures' | 'arrivals'>('departures');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [flightNumberFilter, setFlightNumberFilter] = useState('');
+  const [airlineFilter, setAirlineFilter] = useState('');
+  const [cityFilter, setCityFilter] = useState('');
   const [currentTime, setCurrentTime] = useState(new Date());
   const [flights, setFlights] = useState<Flight[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -35,16 +37,42 @@ export default function Home() {
     setTimeout(() => setIsRefreshing(false), 500);
   };
 
-  // Filter flights based on search term
+  // Clear all filters
+  const clearFilters = () => {
+    setFlightNumberFilter('');
+    setAirlineFilter('');
+    setCityFilter('');
+  };
+
+  // Filter flights based on all three criteria
   const filteredFlights = useMemo(() => {
-    if (!searchTerm.trim()) return flights;
-    const term = searchTerm.toLowerCase();
-    return flights.filter(flight => 
-      flight.flightNumber.toLowerCase().includes(term) ||
-      flight.airline.toLowerCase().includes(term) ||
-      flight.destination.toLowerCase().includes(term)
-    );
-  }, [flights, searchTerm]);
+    let result = flights;
+    
+    if (flightNumberFilter.trim()) {
+      const term = flightNumberFilter.trim().toLowerCase();
+      result = result.filter(flight => 
+        flight.flightNumber.toLowerCase().includes(term)
+      );
+    }
+    
+    if (airlineFilter.trim()) {
+      const term = airlineFilter.trim().toLowerCase();
+      result = result.filter(flight => 
+        flight.airline.toLowerCase().includes(term)
+      );
+    }
+    
+    if (cityFilter.trim()) {
+      const term = cityFilter.trim().toLowerCase();
+      result = result.filter(flight => 
+        flight.destination.toLowerCase().includes(term)
+      );
+    }
+    
+    return result;
+  }, [flights, flightNumberFilter, airlineFilter, cityFilter]);
+
+  const hasActiveFilters = flightNumberFilter || airlineFilter || cityFilter;
 
   // Format current time for header
   const formattedTime = currentTime.toLocaleTimeString('en-GB', { 
@@ -101,8 +129,8 @@ export default function Home() {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Tabs & Search */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+        {/* Tabs */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
           <div className="flex gap-2 bg-fids-card/50 p-1 rounded-xl border border-fids-border w-fit">
             <button
               onClick={() => setActiveTab('departures')}
@@ -126,14 +154,48 @@ export default function Home() {
             </button>
           </div>
 
+          {/* Clear filters button */}
+          {hasActiveFilters && (
+            <button
+              onClick={clearFilters}
+              className="flex items-center gap-2 px-3 py-1.5 text-sm text-gray-400 hover:text-white transition-colors"
+            >
+              <X className="w-4 h-4" />
+              Clear filters
+            </button>
+          )}
+        </div>
+
+        {/* Filter Bar */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
             <input
               type="text"
-              placeholder="Search flight, airline or destination..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full sm:w-80 bg-fids-card border border-fids-border rounded-lg pl-9 pr-4 py-2 text-sm focus:outline-none focus:border-fids-accent focus:ring-1 focus:ring-fids-accent transition-colors"
+              placeholder="Flight number..."
+              value={flightNumberFilter}
+              onChange={(e) => setFlightNumberFilter(e.target.value)}
+              className="w-full bg-fids-card border border-fids-border rounded-lg pl-9 pr-4 py-2 text-sm focus:outline-none focus:border-fids-accent focus:ring-1 focus:ring-fids-accent transition-colors"
+            />
+          </div>
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+            <input
+              type="text"
+              placeholder="Airline name..."
+              value={airlineFilter}
+              onChange={(e) => setAirlineFilter(e.target.value)}
+              className="w-full bg-fids-card border border-fids-border rounded-lg pl-9 pr-4 py-2 text-sm focus:outline-none focus:border-fids-accent focus:ring-1 focus:ring-fids-accent transition-colors"
+            />
+          </div>
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+            <input
+              type="text"
+              placeholder="City (origin/destination)..."
+              value={cityFilter}
+              onChange={(e) => setCityFilter(e.target.value)}
+              className="w-full bg-fids-card border border-fids-border rounded-lg pl-9 pr-4 py-2 text-sm focus:outline-none focus:border-fids-accent focus:ring-1 focus:ring-fids-accent transition-colors"
             />
           </div>
         </div>
@@ -148,7 +210,7 @@ export default function Home() {
           ))}
           {filteredFlights.length === 0 && (
             <div className="text-center py-12 text-gray-500">
-              No flights match your search
+              No flights match your filters
             </div>
           )}
         </div>
