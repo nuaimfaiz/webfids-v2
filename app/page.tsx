@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { Plane, Clock, RefreshCw, X, Search } from 'lucide-react';
+import { Plane, Clock, RefreshCw, X } from 'lucide-react';
 import FlightTable from './components/FlightTable';
 import FlightCard from './components/FlightCard';
 import { generateFlights } from './lib/flightData';
@@ -44,6 +44,18 @@ export default function Home() {
     setCityFilter('');
   };
 
+  // Get unique airlines from current flights
+  const uniqueAirlines = useMemo(() => {
+    const airlines = new Set(flights.map(flight => flight.airline));
+    return Array.from(airlines).sort();
+  }, [flights]);
+
+  // Get unique cities (destinations for departures, origins for arrivals) from current flights
+  const uniqueCities = useMemo(() => {
+    const cities = new Set(flights.map(flight => flight.destination));
+    return Array.from(cities).sort();
+  }, [flights]);
+
   // Filter flights based on all three criteria
   const filteredFlights = useMemo(() => {
     let result = flights;
@@ -55,18 +67,12 @@ export default function Home() {
       );
     }
     
-    if (airlineFilter.trim()) {
-      const term = airlineFilter.trim().toLowerCase();
-      result = result.filter(flight => 
-        flight.airline.toLowerCase().includes(term)
-      );
+    if (airlineFilter) {
+      result = result.filter(flight => flight.airline === airlineFilter);
     }
     
-    if (cityFilter.trim()) {
-      const term = cityFilter.trim().toLowerCase();
-      result = result.filter(flight => 
-        flight.destination.toLowerCase().includes(term)
-      );
+    if (cityFilter) {
+      result = result.filter(flight => flight.destination === cityFilter);
     }
     
     return result;
@@ -166,38 +172,40 @@ export default function Home() {
           )}
         </div>
 
-        {/* Filter Bar */}
+        {/* Filter Bar - Now with Dropdowns */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-            <input
-              type="text"
-              placeholder="Flight number..."
-              value={flightNumberFilter}
-              onChange={(e) => setFlightNumberFilter(e.target.value)}
-              className="w-full bg-fids-card border border-fids-border rounded-lg pl-9 pr-4 py-2 text-sm focus:outline-none focus:border-fids-accent focus:ring-1 focus:ring-fids-accent transition-colors"
-            />
-          </div>
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-            <input
-              type="text"
-              placeholder="Airline name..."
-              value={airlineFilter}
-              onChange={(e) => setAirlineFilter(e.target.value)}
-              className="w-full bg-fids-card border border-fids-border rounded-lg pl-9 pr-4 py-2 text-sm focus:outline-none focus:border-fids-accent focus:ring-1 focus:ring-fids-accent transition-colors"
-            />
-          </div>
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-            <input
-              type="text"
-              placeholder="City (origin/destination)..."
-              value={cityFilter}
-              onChange={(e) => setCityFilter(e.target.value)}
-              className="w-full bg-fids-card border border-fids-border rounded-lg pl-9 pr-4 py-2 text-sm focus:outline-none focus:border-fids-accent focus:ring-1 focus:ring-fids-accent transition-colors"
-            />
-          </div>
+          {/* Flight Number - text input */}
+          <input
+            type="text"
+            placeholder="Flight number..."
+            value={flightNumberFilter}
+            onChange={(e) => setFlightNumberFilter(e.target.value)}
+            className="w-full bg-fids-card border border-fids-border rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-fids-accent focus:ring-1 focus:ring-fids-accent transition-colors"
+          />
+
+          {/* Airline - dropdown */}
+          <select
+            value={airlineFilter}
+            onChange={(e) => setAirlineFilter(e.target.value)}
+            className="w-full bg-fids-card border border-fids-border rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-fids-accent focus:ring-1 focus:ring-fids-accent transition-colors cursor-pointer"
+          >
+            <option value="">All Airlines</option>
+            {uniqueAirlines.map(airline => (
+              <option key={airline} value={airline}>{airline}</option>
+            ))}
+          </select>
+
+          {/* City - dropdown (destination for departures, origin for arrivals) */}
+          <select
+            value={cityFilter}
+            onChange={(e) => setCityFilter(e.target.value)}
+            className="w-full bg-fids-card border border-fids-border rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-fids-accent focus:ring-1 focus:ring-fids-accent transition-colors cursor-pointer"
+          >
+            <option value="">All Cities</option>
+            {uniqueCities.map(city => (
+              <option key={city} value={city}>{city}</option>
+            ))}
+          </select>
         </div>
 
         {/* Flight Boards */}
