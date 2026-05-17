@@ -32,7 +32,7 @@ const baseDepartures: BaseDeparture[] = [
   { id: 'd9', flightNumber: 'NR 910', airline: 'Manta Air', destination: 'Male', scheduledTime: '16:20', gate: '-' },
   { id: 'd10', flightNumber: 'Q2 587', airline: 'Maldivian', destination: 'Male', scheduledTime: '20:00', gate: '-' },
   { id: 'd11', flightNumber: 'Q2 448', airline: 'Maldivian', destination: 'Male', scheduledTime: '22:35', gate: '-' },
-  { id: 'd12', flightNumber: 'NH 8210', airline: 'All Nippon Airways', destination: 'Paris Roissy', scheduledTime: '23:15', gate: '-' },
+  { id: 'd12', flightNumber: 'NH 8210', airline: 'All Nippon Airways', destination: 'Tokyo Haneda', scheduledTime: '23:15', gate: '-' },
 ];
 
 const baseArrivals: BaseArrival[] = [
